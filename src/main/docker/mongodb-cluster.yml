@@ -1,0 +1,16 @@
+version: '2'
+services:
+  timergab-mongodb:
+    image: mongo:4.0.9
+    ports:
+      - '27017:27017'
+    command: mongos --configdb timergab-mongodb-config
+  timergab-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  timergab-mongodb-config:
+    image: mongo:4.0.9
+    container_name: timergab-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
